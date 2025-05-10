@@ -14,3 +14,6 @@ upstream	git@github.com:Arbaz6400/Devops.git (fetch)
 upstream	git@github.com:Arbaz6400/Devops.git (push)
 
 Fork url should appear as origin and target URL as upstream  
+
+
+For the script, ensure you are on UAT, then start the replications 
