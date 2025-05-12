@@ -17,3 +17,8 @@ Fork url should appear as origin and target URL as upstream
 
 
 For the script, ensure you are on UAT, then start the replications 
+
+
+
+system("sed -i -E 's/^[[:space:]]*\"[[:space:]]*replicationFactor[[:space:]]*\" *:([[:space:]]*)" repFactor "/\\\"replicationFactor\\\":\\1 4/' \"" file "\"")
+
