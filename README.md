@@ -18,4 +18,8 @@ Fork url should appear as origin and target URL as upstream
 
 For the script, ensure you are on UAT, then start the replications 
 
-python3 -c "import re; f='yourfile.json'; d=open(f).read(); open(f, 'w').write(re.sub(r'\"\\s*(.*?)\\s*\"\\s*:', r'\"\\1\":', d))"
+awk '{
+  cmd = "python3 -c \"import re; f=\\\"" FILENAME "\\\"; d=open(f).read(); open(f, \\\"w\\\").write(re.sub(r\'\\\"\\\\s*(.*?)\\\\s*\\\"\\\\s*:\', r\'\\\"\\1\\\":\', d))\""
+  system(cmd)
+  exit
+}' yourfile.json
