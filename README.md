@@ -20,5 +20,4 @@ For the script, ensure you are on UAT, then start the replications
 
 
 
-system("sed -i -E 's/^[[:space:]]*\"[[:space:]]*replicationFactor[[:space:]]*\" *:([[:space:]]*)" repFactor "/\\\"replicationFactor\\\":\\1 4/' \"" file "\"")
-
+sed -i -E 's/^[[:space:]]*"[[:space:]]*replicationFactor[[:space:]]*" *:([[:space:]]*)[0-9]+/\"replicationFactor\":\1 4/' "$file"
