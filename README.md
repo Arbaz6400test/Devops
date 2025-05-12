@@ -20,9 +20,4 @@ For the script, ensure you are on UAT, then start the replications
 
 
 
-sed -i -E 's/^[[:space:]]*"[[:space:]]*replicationFactor[[:space:]]*" *:([[:space:]]*)[0-9]+/\"replicationFactor\":\1 4/' "$file"
-
-
-system("sed -i -E 's/^[[:space:]]*\"[[:space:]]*replicationFactor[[:space:]]*\" *:([[:space:]]*)[0-9]+/\\\"replicationFactor\\\":\\1 4/' \"" FILENAME "\"")
-
-sed -i -E 's/^([[:space:]]*)"[[:space:]]*replicationFactor[[:space:]]*"([[:space:]]*):([[:space:]]*)[0-9]+/\1"replicationFactor": 4/' file.json
+sed -i -E 's/^[[:space:]]*"[[:space:]]*replicationFactor[[:space:]]*"[[:space:]]*:[[:space:]]*[0-9]+/"replicationFactor": 4/' test.json
