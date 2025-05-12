@@ -19,4 +19,9 @@ Fork url should appear as origin and target URL as upstream
 For the script, ensure you are on UAT, then start the replications 
 
 
-sed -i -E 's/^[[:space:]]*"[[:space:]]*replicationFactor[[:space:]]*"[[:space:]]*:[[:space:]]*[0-9]+/"replicationFactor": 4/' yourfile.json
+with open("input.json", "r") as f:
+    lines = f.readlines()
+
+with open("output.json", "w") as f:
+    for line in lines:
+        f.write(clean_json_line(line))
