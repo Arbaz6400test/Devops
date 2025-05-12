@@ -25,5 +25,4 @@ sed -i -E 's/^[[:space:]]*"[[:space:]]*replicationFactor[[:space:]]*" *:([[:spac
 
 system("sed -i -E 's/^[[:space:]]*\"[[:space:]]*replicationFactor[[:space:]]*\" *:([[:space:]]*)[0-9]+/\\\"replicationFactor\\\":\\1 4/' \"" FILENAME "\"")
 
-sed -i -E 's/^([[:space:]]*)"[[:space:]]*replicationFactor[[:space:]]*"[[:space:]]*:[[:space:]]*[0-9]+/\1"replicationFactor": 4/' test.json
-
+sed -i -E 's/^([[:space:]]*)"[[:space:]]*replicationFactor[[:space:]]*"([[:space:]]*):([[:space:]]*)[0-9]+/\1"replicationFactor": 4/' file.json
