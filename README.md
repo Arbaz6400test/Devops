@@ -18,18 +18,4 @@ Fork url should appear as origin and target URL as upstream
 
 For the script, ensure you are on UAT, then start the replications 
 
-import re
-
-def clean_json_line(line):
-    # Remove spaces inside quotes (e.g., " abc " → "abc")
-    line = re.sub(r'"\s*([^"]*?)\s*"', r'"\1"', line)
-    
-    # Remove spaces before colons (e.g., "key" : → "key":)
-    line = re.sub(r'"\s*:\s*', r'":', line)
-    
-    return line
-
-# Example usage
-input_line = '    " replicationFactor " : 3'
-output_line = clean_json_line(input_line)
-print(output_line)  # Output: '    "replicationFactor":3'
+python3 -c "import re; f='yourfile.json'; d=open(f).read(); open(f, 'w').write(re.sub(r'\"\\s*(.*?)\\s*\"\\s*:', r'\"\\1\":', d))"
