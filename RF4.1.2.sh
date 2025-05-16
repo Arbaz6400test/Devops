@@ -1,58 +1,46 @@
-#!/bin/bash
 
-# Define logs
-MODLOG="modified_files.log"
-SKIPLOG="skipped_files.log"
 
-# Clear previous logs
-> "$MODLOG"
-> "$SKIPLOG"
+awk '
+BEGIN {
+modified = 0
+skipped = 0
+count=0
+modlog = "modified_files.log"
+skiplog = "skipped_files.log"
 
-# Loop through files in topics/
-for file in topics/*; do
-  [ -f "$file" ] || continue
+system("echo -n > " modlog)
+system("echo -n > " skiplog)
+}
 
-  # Extract replicationFactor value
-  replicationFactor=$(awk -F: '
-  /replicationFactor/ {
-    key=$1
-    gsub(/[" ,]/, "", key)
-    if (key == "replicationFactor") {
-      gsub(/[[:space:]]|,|"/, "", $2)
-      print $2
-      exit
-    }
-  }' "$file")
+/"replicationFactor"/ {
+if (seen[FILENAME]) next
+        seen[FILENAME] = 1
 
-  if ! [[ "$replicationFactor" =~ ^[0-9]+$ ]]; then
-    echo "$file: replicationFactor not found or not numeric, skipping"
-    echo "$file" >> "$SKIPLOG"
-    continue
-  fi
+split($0, a, ":")
+gsub(/[ ,]/, "", a[2])
 
-  if (( replicationFactor > 3 && replicationFactor != 4 )); then
-    echo "$file: replicationFactor is $replicationFactor (greater than 3 and not 4), replacing with 4"
+if (a[2] >= 3 && a[2] != 4) {
+print FILENAME ": replicationFactor is greater than or equal to 3, replacing with 4"                                                 
+#system("sed -i \"s/\\\"replicationFactor\\\"[[:space:]]*:[[:space:]]*[0-9]/\\\"replicationFactor\\\":4/\" " FILENAME)                                                                                                                                                                                                                                                                                         
+system("sed -i \"s/\\\"[[:space:]]*replicationFactor[[:space:]]*\\\"[[:space:]]*:[[:space:]]*[0-9]/\\\"replicationFactor\\\": 4/\" " FILENAME)
+system("echo " FILENAME " >> "modlog)
+modified++
+((count++))
+} else if (a[2] ==4) {
+print FILENAME ": replicationFactor already 4, skipping"
+system("echo " FILENAME " >> "skiplog)
+skipped++
+}
+}
+END {
+print "\nSummary:"
+print "modified files: " modified " (logged in modified_files.log)"
+print "skipped files: " skipped " (logged in skipped_files.log)"
+print "Total files      : " modified + skipped                                                                                       
 
-    # Replace line: handles leading space, spaces inside quotes, space before colon, and preserves after
-    sed -i -E 's/^[[:space:]]*"[[:space:]]*replicationFactor[[:space:]]*" *:([[:space:]]*)'"$replicationFactor"'/\"replicationFactor\":\1 4/' "$file"
-
-    echo "$file" >> "$MODLOG"
-  elif (( replicationFactor == 4 )); then
-    echo "$file: replicationFactor already 4, skipping"
-    echo "$file" >> "$SKIPLOG"
-  else
-    echo "$file: replicationFactor is $replicationFactor, skipping"
-    echo "$file" >> "$SKIPLOG"
-  fi
-done
-
-# Summary
-modified=$(wc -l < "$MODLOG")
-skipped=$(wc -l < "$SKIPLOG")
-total=$((modified + skipped))
-
-echo ""
-echo "Summary:"
-echo "Modified files: $modified (logged in $MODLOG)"
-echo "Skipped files: $skipped (logged in $SKIPLOG)"
-echo "Total files: $total"
+}                                                                                                                                    
+' topics/*
+if [ "$count" -eq 5 ]; then
+        echo "Processed 5 files, stopping."
+break
+fi
