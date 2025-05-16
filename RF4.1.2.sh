@@ -1,3 +1,25 @@
+
+read -p "Enter the branch name you want to work on:" branch
+git pull origin $branch
+git checkout "$branch"
+
+sleep 3
+
+# Step 1: Clean all JSON files in the topics/ folder using Python
+for file in topics/*.json; do
+  python3 -c "
+
+import re
+f = '$file'
+d = open(f).read()
+open(f, 'w').write(re.sub(r'\"\\s*(.*?)\\s*\"\\s*:', r'\"\\1\":', d))
+"
+echo "$file:formatting done"
+echo "=========================================================================="
+
+
+done
+
 awk '
 BEGIN {
     modified = 0
@@ -41,3 +63,14 @@ END {
     print "Total files    : " modified + skipped
 }
 ' topics/*
+
+                                                                                                                                  
+                                                                                                                                     
+git add .                                                                                                                            
+git commit -m "Changes committed to $branch"                                                                                         
+print "\nCommit done:"                                                                                                               
+git push origin $branch                                                                                                              
+echo "==============================================                                                                                 
+Changes pushed to $brnch                                                                                                             
+==================================================="                                                                                 
+                                                                                                                   74,10         Bot 
