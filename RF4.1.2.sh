@@ -30,7 +30,7 @@ BEGIN {
         print FILENAME ": replicationFactor already 4, skipping"
         system("echo " FILENAME " >> " skiplog)
         skipped++
-        count++
+        
     }
 }
 
